@@ -81,7 +81,7 @@ function getJackets(){
   getAllProducts(function(){
     var matchingJackets = [];
     var searchTerm = (jacketType != "NONE" && jacketType != "NO") ? jacketType : "Jackets";
-    for(var x = 0; x < lim; x++){
+    for(var x = 0; x < products.length; x++){
       if(products[x].tags.indexOf(searchTerm) > -1){
         matchingJackets.push(products[x]);
       }
@@ -96,11 +96,11 @@ function getJackets(){
         title: "View Jacket"
       }]
     };
-    for(var x = 0; x < lim; x++){
-      cardObj.title = x.name;
-      cardObj.image_url = x.images[0];
-      cardObj.subtitle = x.regular_price;
-      cardObj.buttons[0].url = x.permalink;
+    for(var x = 0; x < matchingJackets.length; x++){
+      cardObj.title = matchingJackets[x].name;
+      cardObj.image_url = matchingJackets[x].images[0];
+      cardObj.subtitle = matchingJackets[x].regular_price;
+      cardObj.buttons[0].url = matchingJackets[x].permalink;
       cardsSend[x] = cardObj;
     }
     return cardsSend;
