@@ -71,7 +71,7 @@ function getAllProducts(callback){
 function getJackets(){
   getAllProducts({
     var matchingJackets = [];
-    var searchTerm = jacketType != "NONE" ? jacketType : "Jackets";
+    var searchTerm = (jacketType != "NONE" && jacketType != "NO") ? jacketType : "Jackets";
     for(var x = 0; x < lim; x++){
       if(products[x].tags.indexOf(searchTerm) > -1){
         matchingJackets.push(products[x]);
