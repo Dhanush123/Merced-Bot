@@ -107,6 +107,7 @@ function getJackets(req, callback){
     };
     for(var x = 0; x < matchingJackets.length; x++){
       console.log("creating cards");
+      console.log("cardObj.title",matchingJackets[x].name.substring(0,80));
       cardObj.title = matchingJackets[x].name.substring(0,80);
       cardObj.image_url = matchingJackets[x].images[0];
       cardObj.subtitle = matchingJackets[x].regular_price;
