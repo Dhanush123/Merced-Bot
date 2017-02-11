@@ -88,7 +88,7 @@ function getJackets(callback){
     for(var x = 0; x < products.length; x++){
       for(var y = 0; y < products[x].tags.length; y++){
         console.log("tags",products[x].tags);
-        if(products[x].tags.indexOf(searchTerm) > -1){
+        if(products[x].tags[y] == searchTerm)){
           console.log("matching tags found");
           matchingJackets.push(products[x]);
           break;
