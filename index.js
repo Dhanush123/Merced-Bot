@@ -78,7 +78,7 @@ restService.get("/p", function (req, res) {
 // }
 
 function getJackets(callback){
-  WooCommerce.get('products', function(err, data, res) {
+  WooCommerce.get('products?per_page=100', function(err, data, res) {
     console.log(res);
     products = JSON.parse(res);
     console.log("inside getJackets method");
