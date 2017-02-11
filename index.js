@@ -2,6 +2,15 @@
 
 const express = require("express");
 const bodyParser = require("body-parser");
+var WooCommerceAPI = require('woocommerce-api');
+
+var WooCommerce = new WooCommerceAPI({
+  url: 'http://dhanushpatel.x10host.com/', // Your store URL
+  consumerKey: 'ck_365a06a1c7fb871432485d71d8a5c3aa063fa958', // Your consumer key
+  consumerSecret: 'cs_53601b80bf1829af2bfcaa1d90e44642d13b9249', // Your consumer secret
+  wpAPI: true, // Enable the WP REST API integration
+  version: 'wc/v1' // WooCommerce WP REST API version
+});
 
 const restService = express();
 restService.use(bodyParser.json());
