@@ -95,17 +95,17 @@ function getJackets(req, callback){
         }
       }
     }
-    var cardObj = {
-      title: "",
-      image_url: "",
-      subtitle: "",
-      buttons: [{
-        type: "web_url",
-        url: "",
-        title: "View Jacket"
-      }]
-    };
     for(var x = 0; x < matchingJackets.length; x++){
+      var cardObj = {
+        title: "",
+        image_url: "",
+        subtitle: "",
+        buttons: [{
+          type: "web_url",
+          url: "",
+          title: "View Jacket"
+        }]
+      };
       console.log("creating cards");
       console.log("cardObj.title",matchingJackets[x].name.substring(0,80));
       cardObj.title = matchingJackets[x].name.substring(0,80);
