@@ -69,7 +69,7 @@ function getAllProducts(callback){
 }
 
 function getJackets(){
-  getAllProducts({
+  getAllProducts(function(){
     var matchingJackets = [];
     var searchTerm = (jacketType != "NONE" && jacketType != "NO") ? jacketType : "Jackets";
     for(var x = 0; x < lim; x++){
