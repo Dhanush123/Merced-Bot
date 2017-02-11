@@ -91,29 +91,45 @@ function getJackets(req, callback){
         if(products[x].tags[y].name == searchTerm){
           console.log("matching tags found");
           matchingJackets.push(products[x]);
-          break;
+          var cardObj = {
+            title: "",
+            image_url: "",
+            subtitle: "",
+            buttons: [{
+              type: "web_url",
+              url: "",
+              title: "View Jacket"
+            }]
+          };
+          console.log("creating cards");
+          console.log("cardObj.title",matchingJackets[x].name.substring(0,80));
+          cardObj.title = matchingJackets[x].name.substring(0,80);
+          cardObj.image_url = matchingJackets[x].images[0].src;
+          cardObj.subtitle = matchingJackets[x].regular_price;
+          cardObj.buttons[0].url = matchingJackets[x].permalink;
+          cardsSend[x] = cardObj;
         }
       }
     }
-    for(var x = 0; x < matchingJackets.length; x++){
-      var cardObj = {
-        title: "",
-        image_url: "",
-        subtitle: "",
-        buttons: [{
-          type: "web_url",
-          url: "",
-          title: "View Jacket"
-        }]
-      };
-      console.log("creating cards");
-      console.log("cardObj.title",matchingJackets[x].name.substring(0,80));
-      cardObj.title = matchingJackets[x].name.substring(0,80);
-      cardObj.image_url = matchingJackets[x].images[0].src;
-      cardObj.subtitle = matchingJackets[x].regular_price;
-      cardObj.buttons[0].url = matchingJackets[x].permalink;
-      cardsSend[x] = cardObj;
-    }
+    // for(var x = 0; x < matchingJackets.length; x++){
+    //   var cardObj = {
+    //     title: "",
+    //     image_url: "",
+    //     subtitle: "",
+    //     buttons: [{
+    //       type: "web_url",
+    //       url: "",
+    //       title: "View Jacket"
+    //     }]
+    //   };
+    //   console.log("creating cards");
+    //   console.log("cardObj.title",matchingJackets[x].name.substring(0,80));
+    //   cardObj.title = matchingJackets[x].name.substring(0,80);
+    //   cardObj.image_url = matchingJackets[x].images[0].src;
+    //   cardObj.subtitle = matchingJackets[x].regular_price;
+    //   cardObj.buttons[0].url = matchingJackets[x].permalink;
+    //   cardsSend[x] = cardObj;
+    // }
     console.log("should be exiting getJackets method");
     callback();
   });
