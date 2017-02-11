@@ -109,7 +109,7 @@ function getJackets(req, callback){
       console.log("creating cards");
       console.log("cardObj.title",matchingJackets[x].name.substring(0,80));
       cardObj.title = matchingJackets[x].name.substring(0,80);
-      cardObj.image_url = matchingJackets[x].images[0];
+      cardObj.image_url = matchingJackets[x].images[0].src;
       cardObj.subtitle = matchingJackets[x].regular_price;
       cardObj.buttons[0].url = matchingJackets[x].permalink;
       cardsSend[x] = cardObj;
