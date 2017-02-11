@@ -26,7 +26,7 @@ restService.get("/p", function (req, res) {
         if(req.query.jerq){
           jacketType = req.query.jerq;
           console.log("jacketType",jacketType);
-          getJackets(function(result) {
+          getJackets(req, function(result) {
                      //callback is ultimately to return Messenger appropriate responses formatted correctly
                      console.log("results w/ getJackets: ", cardsSend);
                      if(cardsSend){
@@ -42,7 +42,7 @@ restService.get("/p", function (req, res) {
                    });
         }
         else if(req.query.serq || req.query.yerq == ""){
-          getShoes(function(result) {
+          getShoes(req, function(result) {
                      //callback is ultimately to return Messenger appropriate responses formatted correctly
                      console.log("results w/ getShoes: ", cardsSend);
                      if(cardsSend){
@@ -77,7 +77,7 @@ restService.get("/p", function (req, res) {
 //   });
 // }
 
-function getJackets(callback){
+function getJackets(req, callback){
   WooCommerce.get('products?per_page=100', function(err, data, res) {
     console.log(res);
     products = JSON.parse(res);
