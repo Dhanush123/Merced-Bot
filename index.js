@@ -107,7 +107,7 @@ function getJackets(req, callback){
     };
     for(var x = 0; x < matchingJackets.length; x++){
       console.log("creating cards");
-      cardObj.title = matchingJackets[x].name;
+      cardObj.title = matchingJackets[x].name.substring(0,80);
       cardObj.image_url = matchingJackets[x].images[0];
       cardObj.subtitle = matchingJackets[x].regular_price;
       cardObj.buttons[0].url = matchingJackets[x].permalink;
@@ -116,37 +116,6 @@ function getJackets(req, callback){
     console.log("should be exiting getJackets method");
     callback();
   });
-  // getAllProducts(function(){
-  //   console.log("inside getJackets method");
-  //   var matchingJackets = [];
-  //   var searchTerm = (jacketType != "NONE" && jacketType != "NO") ? jacketType : "Jackets";
-  //   for(var x = 0; x < products.length; x++){
-  //     if(products[x].tags.indexOf(searchTerm) > -1){
-  //       console.log("matching tags found");
-  //       matchingJackets.push(products[x]);
-  //     }
-  //   }
-  //   var cardObj = {
-  //     title: "",
-  //     image_url: "",
-  //     subtitle: "",
-  //     buttons: [{
-  //       type: "web_url",
-  //       url: "",
-  //       title: "View Jacket"
-  //     }]
-  //   };
-  //   for(var x = 0; x < matchingJackets.length; x++){
-  //     console.log("creating cards");
-  //     cardObj.title = matchingJackets[x].name;
-  //     cardObj.image_url = matchingJackets[x].images[0];
-  //     cardObj.subtitle = matchingJackets[x].regular_price;
-  //     cardObj.buttons[0].url = matchingJackets[x].permalink;
-  //     cardsSend[x] = cardObj;
-  //   }
-  //   console.log("should be exiting getJackets method");
-  //   return cardsSend;
-  // });
 }
 
 restService.listen((process.env.PORT || 8000), function () {
