@@ -84,9 +84,12 @@ function getJackets(callback){
     var matchingJackets = [];
     var searchTerm = (jacketType != "NONE" && jacketType != "NO") ? jacketType : "Jackets";
     for(var x = 0; x < products.length; x++){
-      if(products[x].tags.indexOf(searchTerm) > -1){
-        console.log("matching tags found");
-        matchingJackets.push(products[x]);
+      for(var y = 0; y < products[x].tags.length; y++){
+        if(products[x].tags.indexOf(searchTerm) > -1){
+          console.log("matching tags found");
+          matchingJackets.push(products[x]);
+          break;
+        }
       }
     }
     var cardObj = {
