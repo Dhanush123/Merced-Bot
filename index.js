@@ -25,6 +25,7 @@ restService.get("/p", function (req, res) {
       if (req) {
         if(req.query.jerq){
           jacketType = req.query.jerq;
+          console.log("jacketType",jacketType);
           getJackets(function(result) {
                      //callback is ultimately to return Messenger appropriate responses formatted correctly
                      console.log("results w/ getJackets: ", cardsSend);
@@ -85,6 +86,7 @@ function getJackets(callback){
     var searchTerm = (jacketType != "NONE" && jacketType != "NO") ? jacketType : "Jackets";
     for(var x = 0; x < products.length; x++){
       for(var y = 0; y < products[x].tags.length; y++){
+        console.log("tags",tags);
         if(products[x].tags.indexOf(searchTerm) > -1){
           console.log("matching tags found");
           matchingJackets.push(products[x]);
