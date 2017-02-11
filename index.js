@@ -18,6 +18,8 @@ restService.use(bodyParser.json());
 var products = [];
 var jacketType = "";
 var cardsSend = [];
+var prodIDS = [];
+var city = "";
 
 restService.get("/p", function (req, res) {
   console.log("hook request");
@@ -25,6 +27,9 @@ restService.get("/p", function (req, res) {
       if (req) {
         if(req.query.jerq){
           jacketType = req.query.jerq;
+          if(req.query.location){
+            city = req.query.location;
+          }
           console.log("jacketType",jacketType);
           getJackets(req, function(result) {
                      //callback is ultimately to return Messenger appropriate responses formatted correctly
@@ -82,7 +87,7 @@ function getJackets(req, callback){
     console.log(res);
     products = JSON.parse(res);
     console.log("inside getJackets method");
-    var matchingJackets = [];
+    // var matchingJackets = [];
     var searchTerm = (jacketType != "NONE" && jacketType != "NO") ? jacketType : "Jackets";
     console.log("products.length",products.length);
     for(var x = 0; x < products.length; x++){
@@ -90,12 +95,52 @@ function getJackets(req, callback){
         console.log("tags",products[x].tags);
         if(products[x].tags[y].name == searchTerm){
           console.log("matching tags found");
-          matchingJackets.push(products[x]);
+          var payInfo = {
+            payment_method: 'bacs',
+            payment_method_title: 'Direct Bank Transfer',
+            set_paid: true,
+            billing: {
+              first_name: 'Dhanush',
+              last_name: 'Patel',
+              city: 'San Francisco',
+              country: 'US',
+              email: 'dhanush.patel@ymail.com',
+              phone: '(123) 456-7890'
+            },
+            shipping: {
+              first_name: 'Dhanush',
+              last_name: 'Patel',
+              city: 'San Francisco',
+              country: 'US'
+            },
+            line_items: [
+              {
+                product_id: products[x].id,
+                quantity: 1
+              }
+            ],
+            shipping_lines: [
+              {
+                method_id: 'flat_rate',
+                method_title: 'Flat Rate',
+                total: 10
+              }
+            ]
+          };
+          WooCommerce.post('orders', payInfo, function(err, data, res) {
+            console.log(res);
+          });
+          // matchingJackets.push(products[x]);
           var cardObj = {
             title: "",
             image_url: "",
             subtitle: "",
             buttons: [{
+              type: "web_url",
+              url: "",
+              title: "View Jacket"
+            },
+            {
               type: "web_url",
               url: "",
               title: "View Jacket"
