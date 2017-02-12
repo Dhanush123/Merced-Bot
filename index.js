@@ -83,6 +83,7 @@ restService.get("/p", function (req, res) {
 // }
 
 function getJackets(req, callback){
+  cardsSend = [];
   WooCommerce.get('products?per_page=100', function(err, data, res) {
     var cardsTemp = [];
     console.log(res);
@@ -174,6 +175,7 @@ function getJackets(req, callback){
     console.log("should be exiting getJackets method");
     for(var i = 0; i < cardsTemp.length; i++){
       if(cardsTemp[i] != null && cardsTemp != "" && cardsTemp != undefined){
+        console.log("legit jacket card!!!!!!!!!");
         cardsSend[i] = cardsTemp[i];
       }
     }
