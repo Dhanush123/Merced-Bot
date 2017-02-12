@@ -106,7 +106,7 @@ function getCoupons(req, callback){
     var coupons = JSON.parse(res);
     console.log(coupons);
     for(var x = 0; x < res.length; x++){
-      if(coupons[x].description){
+      if(coupons[x] && coupons[x].description){
         var cardObj = {
           title: "",
           subtitle: "",
