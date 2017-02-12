@@ -116,8 +116,8 @@ function getCoupons(req, callback){
         };
         console.log("creating cards");
         console.log("cardObj.title",coupons[x].description.substring(0,80));
-        cardObj.title = products[x].description.substring(0,80);
-        cardObj.subtitle = "Discount: " + products[x].amount + "%";
+        cardObj.title = coupons[x].description.substring(0,80);
+        cardObj.subtitle = "Discount: " + coupons[x].amount + "%";
         cardsSend.push(cardObj);
       }
     }
