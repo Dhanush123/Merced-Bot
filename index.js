@@ -52,6 +52,7 @@ restService.get("/p", function (req, res) {
           if(!city){
             city = "Merced";
           }
+          console.log("city is",city);
           getSmartRecs(req, function(result) {
                      //callback is ultimately to return Messenger appropriate responses formatted correctly
                      console.log("results w/ getSmartRecs: ", cardsSend);
@@ -122,6 +123,7 @@ function getSmartRecs(req, callback){
   var options = {
     url: "api.openweathermap.org/data/2.5/weather?q="+city+",us?APPID=ac0889c32e5d10abd3c6f4e3edd0af1f"
   };
+  console.log("weather url",options.url);
   request(options,
   function (err, res, body) {
       console.log("weather res: " + JSON.stringify(res));
