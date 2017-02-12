@@ -23,7 +23,7 @@ var prodIDS = [];
 var city = "";
 var cardsSend = [];
 // api_key is required. You can get one at http://www.openweathermap.com/
-weather.api_key = 'ac0889c32e5d10abd3c6f4e3edd0af1f';
+weather.api_key = '8a06625d9e996bce4caee3926bf83e72';
 weather.temp = 'f';
 
 restService.get("/p", function (req, res) {
