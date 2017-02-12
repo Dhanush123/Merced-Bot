@@ -120,7 +120,7 @@ function getSmartRecs(req, callback){
   };
   request(options,
   function (err, res, body) {
-      console.log("USGS res: " + JSON.stringify(res));
+      console.log("weather res: " + JSON.stringify(res));
       var tempF = (body.main.temp * 9.0/5) - 459.67;
       var searchTerm = tempF > 68 ? "Hot" : "Cold";
       cardsSend = [];
