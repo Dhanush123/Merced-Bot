@@ -105,8 +105,8 @@ function getCoupons(req, callback){
   WooCommerce.get('coupons', function(err, data, res) {
     var coupons = JSON.parse(res);
     console.log(coupons);
-    for(var x = 0; x < res.length; x++){
-      if(coupons[x].description){
+    for(var x = 0; x < coupons.length; x++){
+      if(coupons[x] && coupons[x].description){
         var cardObj = {
           title: "",
           subtitle: "",
