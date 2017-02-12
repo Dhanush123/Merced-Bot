@@ -121,8 +121,7 @@ function getSmartRecs(req, callback){
   request(options,
   function (err, res, body) {
       console.log("USGS res: " + JSON.stringify(res));
-      var info = JSON.parse(body);
-      var tempF = (info.main.temp * 9.0/5) - 459.67;
+      var tempF = (body.main.temp * 9.0/5) - 459.67;
       var searchTerm = tempF > 68 ? "Hot" : "Cold";
       cardsSend = [];
       WooCommerce.get('products?per_page=100', function(err, data, res) {
