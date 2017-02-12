@@ -2,7 +2,8 @@
 
 const express = require("express");
 const bodyParser = require("body-parser");
-const WooCommerceAPI = require('woocommerce-api');
+const WooCommerceAPI = require("woocommerce-api");
+const request = require("request");
 
 var WooCommerce = new WooCommerceAPI({
   url: 'http://dhanushpatel.x10host.com/', // Your store URL
