@@ -17,9 +17,9 @@ restService.use(bodyParser.json());
 
 var products = [];
 var jacketType = "";
-var cardsSend = [];
 var prodIDS = [];
 var city = "";
+var cardsSend = [];
 
 restService.get("/p", function (req, res) {
   console.log("hook request");
@@ -84,6 +84,7 @@ restService.get("/p", function (req, res) {
 
 function getJackets(req, callback){
   WooCommerce.get('products?per_page=100', function(err, data, res) {
+    var cardsTemp = [];
     console.log(res);
     products = JSON.parse(res);
     console.log("inside getJackets method");
@@ -147,7 +148,7 @@ function getJackets(req, callback){
           cardObj.image_url = products[x].images[0].src;
           cardObj.subtitle = products[x].regular_price;
           cardObj.buttons[0].url = products[x].permalink;
-          cardsSend[x] = cardObj;
+          cardsTemp[x] = cardObj;
         }
       }
     }
@@ -171,6 +172,11 @@ function getJackets(req, callback){
     //   cardsSend[x] = cardObj;
     // }
     console.log("should be exiting getJackets method");
+    for(var i = 0; i < cardsTemp.length; i++){
+      if(cardsTemp[i] != null){
+        cardsSend[i] = cardsTemp[i];
+      }
+    }
     callback();
   });
 }
