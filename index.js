@@ -125,9 +125,10 @@ function getSmartRecs(req, callback){
   };
   console.log("weather url",options.url);
   request(options,
-  function (err, res, body) {
+  function (res) {
+      res = JSON.parse(res);
       console.log("weather res: " + JSON.stringify(res));
-      var tempF = (body.main.temp * 9.0/5) - 459.67;
+      var tempF = (res.main.temp * 9.0/5) - 459.67;
       var searchTerm = tempF > 68 ? "Hot" : "Cold";
       cardsSend = [];
       WooCommerce.get('products?per_page=100', function(err, data, res) {
