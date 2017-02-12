@@ -4,6 +4,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const WooCommerceAPI = require("woocommerce-api");
 const request = require("request");
+const weather = require('npm-openweathermap');
 
 var WooCommerce = new WooCommerceAPI({
   url: 'http://dhanushpatel.x10host.com/', // Your store URL
@@ -21,6 +22,9 @@ var jacketType = "";
 var prodIDS = [];
 var city = "";
 var cardsSend = [];
+// api_key is required. You can get one at http://www.openweathermap.com/
+weather.api_key = 'ac0889c32e5d10abd3c6f4e3edd0af1f';
+weather.temp = 'f';
 
 restService.get("/p", function (req, res) {
   console.log("hook request");
@@ -120,87 +124,94 @@ function getCoupons(req, callback){
   });
 }
 function getSmartRecs(req, callback){
-  var options = {
-    url: "api.openweathermap.org/data/2.5/weather?q="+city+",us&APPID=ac0889c32e5d10abd3c6f4e3edd0af1f&callback=test"
-  };
-  console.log("weather url",options.url);
-  request(options,
-  function (res) {
-      res = JSON.parse(res);
-      console.log("weather res: " + JSON.stringify(res));
-      var tempF = (res.main.temp * 9.0/5) - 459.67;
-      var searchTerm = tempF > 68 ? "Hot" : "Cold";
-      cardsSend = [];
-      WooCommerce.get('products?per_page=100', function(err, data, res) {
-        console.log(res);
-        products = JSON.parse(res);
-        console.log("inside getSmartRecs method");
-        console.log("products.length",products.length);
-        for(var x = 0; x < products.length; x++){
-          for(var y = 0; y < products[x].tags.length; y++){
-            console.log("tags",products[x].tags);
-            if(products[x].tags[y].name == searchTerm){
-              console.log("matching tags found");
-              var payInfo = {
-                payment_method: 'bacs',
-                payment_method_title: 'Direct Bank Transfer',
-                set_paid: true,
-                billing: {
-                  first_name: 'Dhanush',
-                  last_name: 'Patel',
-                  city: 'San Francisco',
-                  country: 'US',
-                  email: 'dhanush.patel@ymail.com',
-                  phone: '(123) 456-7890'
-                },
-                shipping: {
-                  first_name: 'Dhanush',
-                  last_name: 'Patel',
-                  city: 'San Francisco',
-                  country: 'US'
-                },
-                line_items: [
-                  {
-                    product_id: products[x].id,
-                    quantity: 1
-                  }
-                ],
-                shipping_lines: [
-                  {
-                    method_id: 'flat_rate',
-                    method_title: 'Flat Rate',
-                    total: 10
-                  }
-                ]
-              };
-              var cardObj = {
-                title: "",
-                image_url: "",
-                subtitle: "",
-                buttons: [{
-                  type: "web_url",
-                  url: "",
-                  title: "View Clothing"
-                },
+
+  weather.get_weather_custom('city', city+',us', 'forecast').then(function(res){
+    console.log(res);
+    var tempF = res.main.temp;
+    var searchTerm = tempF > 68 ? "Hot" : "Cold";
+    cardsSend = [];
+    WooCommerce.get('products?per_page=100', function(err, data, res) {
+      console.log(res);
+      products = JSON.parse(res);
+      console.log("inside getSmartRecs method");
+      console.log("products.length",products.length);
+      for(var x = 0; x < products.length; x++){
+        for(var y = 0; y < products[x].tags.length; y++){
+          console.log("tags",products[x].tags);
+          if(products[x].tags[y].name == searchTerm){
+            console.log("matching tags found");
+            var payInfo = {
+              payment_method: 'bacs',
+              payment_method_title: 'Direct Bank Transfer',
+              set_paid: true,
+              billing: {
+                first_name: 'Dhanush',
+                last_name: 'Patel',
+                city: 'San Francisco',
+                country: 'US',
+                email: 'dhanush.patel@ymail.com',
+                phone: '(123) 456-7890'
+              },
+              shipping: {
+                first_name: 'Dhanush',
+                last_name: 'Patel',
+                city: 'San Francisco',
+                country: 'US'
+              },
+              line_items: [
                 {
-                  "type":"element_share"
-                }]
-              };
-              console.log("creating cards");
-              console.log("cardObj.title",products[x].name.substring(0,80));
-              cardObj.title = products[x].name.substring(0,80);
-              cardObj.image_url = products[x].images[0].src;
-              cardObj.subtitle = products[x].regular_price;
-              cardObj.buttons[0].url = products[x].permalink;
-              cardsSend.push(cardObj);
-              doOrder(payInfo);
-            }
+                  product_id: products[x].id,
+                  quantity: 1
+                }
+              ],
+              shipping_lines: [
+                {
+                  method_id: 'flat_rate',
+                  method_title: 'Flat Rate',
+                  total: 10
+                }
+              ]
+            };
+            var cardObj = {
+              title: "",
+              image_url: "",
+              subtitle: "",
+              buttons: [{
+                type: "web_url",
+                url: "",
+                title: "View Clothing"
+              },
+              {
+                "type":"element_share"
+              }]
+            };
+            console.log("creating cards");
+            console.log("cardObj.title",products[x].name.substring(0,80));
+            cardObj.title = products[x].name.substring(0,80);
+            cardObj.image_url = products[x].images[0].src;
+            cardObj.subtitle = products[x].regular_price;
+            cardObj.buttons[0].url = products[x].permalink;
+            cardsSend.push(cardObj);
+            doOrder(payInfo);
           }
         }
-        console.log("should be exiting getSmartRecs method");
-        callback();
-      });
+      }
+      console.log("should be exiting getSmartRecs method");
+      callback();
     });
+  },function(error){
+      console.log(error);
+  });
+  // var options = {
+  //   url: "api.openweathermap.org/data/2.5/weather?q="+city+",us&APPID=ac0889c32e5d10abd3c6f4e3edd0af1f&callback=test",
+  //   method: "GET"
+  // };
+  // console.log("weather url",options.url);
+  // request(options,
+  // function (res) {
+  //     res = JSON.parse(res);
+  //     console.log("weather res: " + JSON.stringify(res));
+
 }
 
 function getJackets(req, callback){
