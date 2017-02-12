@@ -140,7 +140,7 @@ function getJackets(req, callback){
               type: "web_url",
               url: "",
               title: "View Jacket"
-            }]
+            },]
           };
           console.log("creating cards");
           console.log("cardObj.title",products[x].name.substring(0,80));
@@ -173,7 +173,7 @@ function getJackets(req, callback){
     // }
     console.log("should be exiting getJackets method");
     for(var i = 0; i < cardsTemp.length; i++){
-      if(cardsTemp[i] != null){
+      if(cardsTemp[i] != null && cardsTemp != "" && cardsTemp!= undefined){
         cardsSend[i] = cardsTemp[i];
       }
     }
