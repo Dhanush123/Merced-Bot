@@ -127,7 +127,7 @@ function getSmartRecs(req, callback){
 
   weather.get_weather_custom('city', city+',us', 'forecast').then(function(res){
     console.log(res);
-    var tempF = res.main.temp;
+    var tempF = 9.0/5.0 * ((res[0].main.temp) - 273) + 32;
     var searchTerm = tempF > 68 ? "Hot" : "Cold";
     cardsSend = [];
     WooCommerce.get('products?per_page=100', function(err, data, res) {
