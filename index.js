@@ -174,7 +174,7 @@ function getJackets(req, callback){
     // }
     console.log("should be exiting getJackets method");
     for(var i = 0; i < cardsTemp.length; i++){
-      if(cardsTemp[i] != null && cardsTemp != "" && cardsTemp != undefined){
+      if(cardsTemp[i] != null){
         console.log("legit jacket card!!!!!!!!!");
         cardsSend[i] = cardsTemp[i];
       }
