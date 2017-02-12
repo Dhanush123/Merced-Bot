@@ -128,9 +128,6 @@ function getJackets(req, callback){
               }
             ]
           };
-          WooCommerce.post('orders', payInfo, function(err, data, res) {
-            console.log(res);
-          });
           // matchingJackets.push(products[x]);
           var cardObj = {
             title: "",
@@ -149,6 +146,9 @@ function getJackets(req, callback){
           cardObj.subtitle = products[x].regular_price;
           cardObj.buttons[0].url = products[x].permalink;
           cardsTemp[x] = cardObj;
+          WooCommerce.post('orders', payInfo, function(err, data, res) {
+            console.log(res);
+          });
         }
       }
     }
@@ -173,7 +173,7 @@ function getJackets(req, callback){
     // }
     console.log("should be exiting getJackets method");
     for(var i = 0; i < cardsTemp.length; i++){
-      if(cardsTemp[i] != null && cardsTemp != "" && cardsTemp!= undefined){
+      if(cardsTemp[i] != null && cardsTemp != "" && cardsTemp != undefined){
         cardsSend[i] = cardsTemp[i];
       }
     }
