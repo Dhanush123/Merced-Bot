@@ -140,38 +140,6 @@ function getSmartRecs(req, callback){
           console.log("tags",products[x].tags);
           if(products[x].tags[y].name == searchTerm){
             console.log("matching tags found");
-            var payInfo = {
-              payment_method: 'bacs',
-              payment_method_title: 'Direct Bank Transfer',
-              set_paid: true,
-              billing: {
-                first_name: 'Dhanush',
-                last_name: 'Patel',
-                city: 'San Francisco',
-                country: 'US',
-                email: 'dhanush.patel@ymail.com',
-                phone: '(123) 456-7890'
-              },
-              shipping: {
-                first_name: 'Dhanush',
-                last_name: 'Patel',
-                city: 'San Francisco',
-                country: 'US'
-              },
-              line_items: [
-                {
-                  product_id: products[x].id,
-                  quantity: 1
-                }
-              ],
-              shipping_lines: [
-                {
-                  method_id: 'flat_rate',
-                  method_title: 'Flat Rate',
-                  total: 10
-                }
-              ]
-            };
             var cardObj = {
               title: "",
               image_url: "",
@@ -192,7 +160,6 @@ function getSmartRecs(req, callback){
             cardObj.subtitle = products[x].regular_price;
             cardObj.buttons[0].url = products[x].permalink;
             cardsSend.push(cardObj);
-            doOrder(payInfo);
           }
         }
       }
