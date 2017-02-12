@@ -159,7 +159,9 @@ function getSmartRecs(req, callback){
             cardObj.image_url = products[x].images[0].src;
             cardObj.subtitle = products[x].regular_price;
             cardObj.buttons[0].url = products[x].permalink;
-            cardsSend.push(cardObj);
+            if(cardsSend.length < 10){
+              cardsSend.push(cardObj);
+            }
           }
         }
       }
