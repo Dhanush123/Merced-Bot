@@ -126,6 +126,7 @@ function getCoupons(req, callback){
         cardsSend.push(cardObj);
       }
     }
+    callback();
   });
 }
 function getSmartRecs(req, callback){
