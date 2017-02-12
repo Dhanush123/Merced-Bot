@@ -139,11 +139,6 @@ function getJackets(req, callback){
               type: "web_url",
               url: "",
               title: "View Jacket"
-            },
-            {
-              type: "web_url",
-              url: "",
-              title: "View Jacket"
             }]
           };
           console.log("creating cards");
