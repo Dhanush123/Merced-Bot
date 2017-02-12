@@ -149,7 +149,7 @@ function getJackets(req, callback){
           cardObj.image_url = products[x].images[0].src;
           cardObj.subtitle = products[x].regular_price;
           cardObj.buttons[0].url = products[x].permalink;
-          cardsSend[x] = cardObj;
+          cardsSend.push(cardObj);
           doOrder(payInfo);
         }
       }
