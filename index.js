@@ -121,7 +121,7 @@ function getCoupons(req, callback){
 }
 function getSmartRecs(req, callback){
   var options = {
-    url: "api.openweathermap.org/data/2.5/weather?q="+city+",us&APPID=ac0889c32e5d10abd3c6f4e3edd0af1f"
+    url: "api.openweathermap.org/data/2.5/weather?q="+city+",us&APPID=ac0889c32e5d10abd3c6f4e3edd0af1f&callback=test"
   };
   console.log("weather url",options.url);
   request(options,
