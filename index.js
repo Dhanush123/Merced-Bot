@@ -138,7 +138,10 @@ function getJackets(req, callback){
               type: "web_url",
               url: "",
               title: "View Jacket"
-            },]
+            },
+            {
+              "type":"element_share"
+            }]
           };
           console.log("creating cards");
           console.log("cardObj.title",products[x].name.substring(0,80));
@@ -147,9 +150,7 @@ function getJackets(req, callback){
           cardObj.subtitle = products[x].regular_price;
           cardObj.buttons[0].url = products[x].permalink;
           cardsTemp[x] = cardObj;
-          WooCommerce.post('orders', payInfo, function(err, data, res) {
-            console.log(res);
-          });
+          doOrder(payInfo);
         }
       }
     }
@@ -180,6 +181,12 @@ function getJackets(req, callback){
       }
     }
     callback();
+  });
+}
+
+function doOrder(payInfo){
+  WooCommerce.post('orders', payInfo, function(err, data, res) {
+    console.log(res);
   });
 }
 
