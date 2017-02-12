@@ -26,11 +26,12 @@ restService.get("/p", function (req, res) {
   console.log("hook request");
   try {
       if (req) {
+        if(req.query.location){
+          city = req.query.location;
+        }
+        //---------------------------
         if(req.query.jerq){
           jacketType = req.query.jerq;
-          if(req.query.location){
-            city = req.query.location;
-          }
           console.log("jacketType",jacketType);
           getJackets(req, function(result) {
                      //callback is ultimately to return Messenger appropriate responses formatted correctly
@@ -48,9 +49,12 @@ restService.get("/p", function (req, res) {
                    });
         }
         else if(req.query.serq){
+          if(!city){
+            city = "Merced";
+          }
           getSmartRecs(req, function(result) {
                      //callback is ultimately to return Messenger appropriate responses formatted correctly
-                     console.log("results w/ getShoes: ", cardsSend);
+                     console.log("results w/ getSmartRecs: ", cardsSend);
                      if(cardsSend){
                        return res.json({
                          results: cardsSend,
@@ -66,7 +70,7 @@ restService.get("/p", function (req, res) {
         else if (req.query.cerq){
           getCoupons(req, function(result) {
                      //callback is ultimately to return Messenger appropriate responses formatted correctly
-                     console.log("results w/ getShoes: ", cardsSend);
+                     console.log("results w/ getCoupons: ", cardsSend);
                      if(cardsSend){
                        return res.json({
                          results: cardsSend,
