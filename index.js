@@ -2,7 +2,7 @@
 
 const express = require("express");
 const bodyParser = require("body-parser");
-var WooCommerceAPI = require('woocommerce-api');
+const WooCommerceAPI = require('woocommerce-api');
 
 var WooCommerce = new WooCommerceAPI({
   url: 'http://dhanushpatel.x10host.com/', // Your store URL
@@ -46,8 +46,8 @@ restService.get("/p", function (req, res) {
                      }
                    });
         }
-        else if(req.query.serq || req.query.yerq == ""){
-          getShoes(req, function(result) {
+        else if(req.query.serq){
+          getSmartRecs(req, function(result) {
                      //callback is ultimately to return Messenger appropriate responses formatted correctly
                      console.log("results w/ getShoes: ", cardsSend);
                      if(cardsSend){
@@ -62,6 +62,22 @@ restService.get("/p", function (req, res) {
                      }
                    });
         }
+        else if (req.query.cerq){
+          getCoupons(req, function(result) {
+                     //callback is ultimately to return Messenger appropriate responses formatted correctly
+                     console.log("results w/ getShoes: ", cardsSend);
+                     if(cardsSend){
+                       return res.json({
+                         results: cardsSend,
+                       });
+                     }
+                     else{
+                       return res.json({
+                         err: "NOCARDSFOUND"
+                       });
+                     }
+                  });
+        }
       }
   }
   catch (err) {
@@ -75,21 +91,117 @@ restService.get("/p", function (req, res) {
   }
 });
 
-// function getAllProducts(callback){
-//   WooCommerce.get('products', function(err, data, res) {
-//     console.log(res);
-//     products = JSON.parse(res);
-//   });
-// }
+function getCoupons(req, callback){
+  WooCommerce.get('coupons', function(err, data, res) {
+    var coupons = JSON.parse(res);
+    console.log(coupons);
+    for(var x = 0; x < res.length; x++){
+      if(coupons[x].description){
+        var cardObj = {
+          title: "",
+          subtitle: "",
+          buttons: [{
+            "type":"element_share"
+          }]
+        };
+        console.log("creating cards");
+        console.log("cardObj.title",coupons[x].description.substring(0,80));
+        cardObj.title = products[x].description.substring(0,80);
+        cardObj.subtitle = "Discount: " + products[x].amount + "%";
+        cardsSend.push(cardObj);
+      }
+    }
+  });
+}
+function getSmartRecs(req, callback){
+  var options = {
+    url: "api.openweathermap.org/data/2.5/weather?q="+city+",us?APPID=ac0889c32e5d10abd3c6f4e3edd0af1f"
+  };
+  request(options,
+  function (err, res, body) {
+      console.log("USGS res: " + JSON.stringify(res));
+      var info = JSON.parse(body);
+      var tempF = (info.main.temp * 9.0/5) - 459.67;
+      var searchTerm = tempF > 68 ? "Hot" : "Cold";
+      cardsSend = [];
+      WooCommerce.get('products?per_page=100', function(err, data, res) {
+        console.log(res);
+        products = JSON.parse(res);
+        console.log("inside getSmartRecs method");
+        console.log("products.length",products.length);
+        for(var x = 0; x < products.length; x++){
+          for(var y = 0; y < products[x].tags.length; y++){
+            console.log("tags",products[x].tags);
+            if(products[x].tags[y].name == searchTerm){
+              console.log("matching tags found");
+              var payInfo = {
+                payment_method: 'bacs',
+                payment_method_title: 'Direct Bank Transfer',
+                set_paid: true,
+                billing: {
+                  first_name: 'Dhanush',
+                  last_name: 'Patel',
+                  city: 'San Francisco',
+                  country: 'US',
+                  email: 'dhanush.patel@ymail.com',
+                  phone: '(123) 456-7890'
+                },
+                shipping: {
+                  first_name: 'Dhanush',
+                  last_name: 'Patel',
+                  city: 'San Francisco',
+                  country: 'US'
+                },
+                line_items: [
+                  {
+                    product_id: products[x].id,
+                    quantity: 1
+                  }
+                ],
+                shipping_lines: [
+                  {
+                    method_id: 'flat_rate',
+                    method_title: 'Flat Rate',
+                    total: 10
+                  }
+                ]
+              };
+              var cardObj = {
+                title: "",
+                image_url: "",
+                subtitle: "",
+                buttons: [{
+                  type: "web_url",
+                  url: "",
+                  title: "View Clothing"
+                },
+                {
+                  "type":"element_share"
+                }]
+              };
+              console.log("creating cards");
+              console.log("cardObj.title",products[x].name.substring(0,80));
+              cardObj.title = products[x].name.substring(0,80);
+              cardObj.image_url = products[x].images[0].src;
+              cardObj.subtitle = products[x].regular_price;
+              cardObj.buttons[0].url = products[x].permalink;
+              cardsSend.push(cardObj);
+              doOrder(payInfo);
+            }
+          }
+        }
+        console.log("should be exiting getSmartRecs method");
+        callback();
+      });
+    });
+}
 
 function getJackets(req, callback){
   cardsSend = [];
   WooCommerce.get('products?per_page=100', function(err, data, res) {
-    // var cardsTemp = [];
     console.log(res);
     products = JSON.parse(res);
     console.log("inside getJackets method");
-    // var matchingJackets = [];
     var searchTerm = (jacketType != "NONE" && jacketType != "NO") ? jacketType : "Jackets";
     console.log("products.length",products.length);
     for(var x = 0; x < products.length; x++){
@@ -129,7 +241,6 @@ function getJackets(req, callback){
               }
             ]
           };
-          // matchingJackets.push(products[x]);
           var cardObj = {
             title: "",
             image_url: "",
@@ -154,32 +265,7 @@ function getJackets(req, callback){
         }
       }
     }
-    // for(var x = 0; x < matchingJackets.length; x++){
-    //   var cardObj = {
-    //     title: "",
-    //     image_url: "",
-    //     subtitle: "",
-    //     buttons: [{
-    //       type: "web_url",
-    //       url: "",
-    //       title: "View Jacket"
-    //     }]
-    //   };
-    //   console.log("creating cards");
-    //   console.log("cardObj.title",matchingJackets[x].name.substring(0,80));
-    //   cardObj.title = matchingJackets[x].name.substring(0,80);
-    //   cardObj.image_url = matchingJackets[x].images[0].src;
-    //   cardObj.subtitle = matchingJackets[x].regular_price;
-    //   cardObj.buttons[0].url = matchingJackets[x].permalink;
-    //   cardsSend[x] = cardObj;
-    // }
     console.log("should be exiting getJackets method");
-    // for(var i = 0; i < cardsTemp.length; i++){
-    //   if(cardsTemp[i] != null){
-    //     console.log("legit jacket card!!!!!!!!!");
-    //     cardsSend[i] = cardsTemp[i];
-    //   }
-    // }
     callback();
   });
 }
