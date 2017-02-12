@@ -106,7 +106,7 @@ function getCoupons(req, callback){
     var coupons = JSON.parse(res);
     console.log(coupons);
     for(var x = 0; x < coupons.length; x++){
-      if(coupons[x] && coupons[x].description){
+      if(coupons[x]){
         var cardObj = {
           title: "",
           subtitle: "",
@@ -115,8 +115,13 @@ function getCoupons(req, callback){
           }]
         };
         console.log("creating cards");
-        console.log("cardObj.title",coupons[x].description.substring(0,80));
-        cardObj.title = coupons[x].description.substring(0,80);
+        if(coupons[x].description){
+          console.log("cardObj.title",coupons[x].description.substring(0,80));
+          cardObj.title = coupons[x].description.substring(0,80);
+        }
+        else{
+          cardObj.title = "Special Deal!";
+        }
         cardObj.subtitle = "Discount: " + coupons[x].amount + "%";
         cardsSend.push(cardObj);
       }
